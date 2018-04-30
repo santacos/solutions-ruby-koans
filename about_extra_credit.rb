@@ -42,29 +42,24 @@ class Game
   def set_players(number)
     @players = (1..number).map { |index| index = Player.new } 
   end
+
+  def getScoreByDice(index, size)
+    mappingScore = {
+      1 => [1000, 100],
+      6 => [600, 0],
+      5 => [500, 50],
+      4 => [400, 0],
+      3 => [300, 0],
+      3 => [300, 0],
+      2 => [200, 0]
+    }
+    (size / 3) * mappingScore[index][0] + (size % 3) * mappingScore[index][1]
+  end
   
   def calculateScore(diceSet)
     groupedDice = diceSet.group_by{|i| i}
     totalScore = 0
-    if (groupedDice[1] != nil)
-      totalScore += (groupedDice[1].size / 3) * 1000 + (groupedDice[1].size % 3) * 100
-    end
-    if (groupedDice[6] != nil)
-      totalScore += (groupedDice[6].size / 3) * 600
-    end
-    if (groupedDice[5] != nil)
-      totalScore += (groupedDice[5].size / 3) * 500 + (groupedDice[5].size % 3) * 50
-    end
-    if (groupedDice[4] != nil)
-      totalScore += (groupedDice[4].size / 3) * 400
-    end
-    if (groupedDice[3] != nil)
-      totalScore += (groupedDice[3].size / 3) * 300
-    end
-    if (groupedDice[2] != nil)
-      totalScore += (groupedDice[2].size / 3) * 200
-    end
-
+    groupedDice.each {|key, values| totalScore += getScoreByDice(key, values.size)}
     totalScore
   end
 end
