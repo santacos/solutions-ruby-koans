@@ -34,12 +34,12 @@ class Game
 		puts "The game starts."
 		puts "How many players do we have? (2/3/4)"
     numberOfPlayers = (gets).to_i
-    set_players(numberOfPlayers)
+    initialize_players(numberOfPlayers)
 		puts "Now we get #{@players.size} players"
 		1
   end
 
-  def set_players(number)
+  def initialize_players(number)
     @players = (1..number).map { |index| index = Player.new } 
   end
 
@@ -50,17 +50,15 @@ class Game
       5 => [500, 50],
       4 => [400, 0],
       3 => [300, 0],
-      3 => [300, 0],
       2 => [200, 0]
     }
     (size / 3) * mappingScore[index][0] + (size % 3) * mappingScore[index][1]
   end
   
   def calculateScore(diceSet)
-    groupedDice = diceSet.group_by{|i| i}
-    totalScore = 0
-    groupedDice.each {|key, values| totalScore += getScoreByDice(key, values.size)}
-    totalScore
+    diceSet.group_by{|i| i}.reduce(0) {
+      |acc, (key, values)| acc + getScoreByDice(key, values.size)
+    }
   end
 end
 
