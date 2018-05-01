@@ -105,4 +105,4 @@ class ExtraTestCase < Neo::Koan
 	end
 end
 
-Game.new.start
+# Game.new.start

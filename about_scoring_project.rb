@@ -31,6 +31,21 @@ require File.expand_path(File.dirname(__FILE__) + '/neo')
 
 def score(dice)
   # You need to write this method
+  dice.group_by{|i| i}.reduce(0) {
+    |acc, (key, values)| acc + getScoreByDice(key, values.size)
+  }
+end
+
+def getScoreByDice(index, size)
+  mappingScore = {
+    1 => [1000, 100],
+    6 => [600, 0],
+    5 => [500, 50],
+    4 => [400, 0],
+    3 => [300, 0],
+    2 => [200, 0]
+  }
+  (size / 3) * mappingScore[index][0] + (size % 3) * mappingScore[index][1]
 end
 
 class AboutScoringProject < Neo::Koan
